@@ -90,6 +90,7 @@ class Sites extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Обновлен',
             'author_id' => 'Автор',
+            'siteCallback' => 'Обратная связь'
         ];
     }
 

@@ -21,6 +21,13 @@ use yii\jui\DatePicker;
             'contacts:ntext',
             'comments:ntext',
             [
+                'attribute' => 'siteCallback',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return '<p class="text-center"><span class="label label-success">'.$model->siteCallback->types[$model->siteCallback->type] .'</span> <br/>'. $model->siteCallback->value . '</p>';
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'value' => function ($model) {
                     return $model->statuses[$model->status];
