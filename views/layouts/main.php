@@ -4,6 +4,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\Sites;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -32,25 +33,8 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    /*echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
-                ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']],
-        ],
-    ]);*/
-    $navItems=[
-        //['label' => 'Домашняя', 'url' => ['/site/index']],
-        //['label' => 'Status', 'url' => ['/status/index']],
-        //['label' => 'About', 'url' => ['/site/about']],
-        //['label' => 'Contact', 'url' => ['/site/contact']]
-    ];
+
+    $navItems = [];
 
     if (Yii::$app->user->isGuest) {
         array_push($navItems,
@@ -58,8 +42,6 @@ AppAsset::register($this);
             ['label' => 'Зарегистрироваться', 'url' => ['/user/registration/register']]
         );
     } else {
-        if(Yii::$app->user->identity->role == 'redactor')
-            array_push($navItems,['label' => 'Мои журналисты', 'url' => ['/journalists']]);
         array_push($navItems,
             ['label' => 'Выйти (' . Yii::$app->user->identity->username . ')', 'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']]
         );
@@ -71,12 +53,29 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
-
+    <hr>
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= $content ?>
+        <div class="col-md-2">
+            <?php
+                if(!Yii::$app->user->isGuest) {
+                    $navItems = [
+                        ['label' => 'Добавить сайт', 'url' => ['/site/default/create']],
+                        ['label' => 'Список всех сайтов', 'url' => ['/site/default/index']],
+                        ['label' => 'В ожидании контактов', 'url' => ['/site/default/contact']],
+                        ['label' => 'В ожидании ответа', 'url' => ['/site/default/answer']],
+                        ['label' => 'Отказанные', 'url' => ['/site/default/deny']],
+                        ['label' => 'Согласные', 'url' => ['/site/default/agree']],
+                    ];
+                    echo Nav::widget([
+                        'items' => $navItems,
+                        'options' => ['class' =>'nav nav-pills'],
+                    ]);
+                }
+            ?>
+        </div>
+        <div class="col-md-10">
+            <?= $content ?>
+        </div>
     </div>
 </div>
 

@@ -19,13 +19,15 @@ class m150428_083252_first extends Migration
 
         $this->createTable('sites', [
             'id'            => Schema::TYPE_PK,
-            'domain'        => Schema::TYPE_STRING  . ' NOT NULL',
+            'domain'        => Schema::TYPE_STRING  . 'UNIQUE NOT NULL',
             'contacts'      => Schema::TYPE_TEXT,
             'comments'      => Schema::TYPE_TEXT,
+            'status'        => Schema::TYPE_INTEGER,
             'created_at'    => Schema::TYPE_INTEGER,
             'updated_at'    => Schema::TYPE_INTEGER,
             'author_id'     => Schema::TYPE_INTEGER . ' NOT NULL',
         ]);
+        $this->addForeignKey('fk_sites_author_id', 'sites', 'author_id', 'user', 'id', 'CASCADE', 'CASCADE');
 
         $this->createTable('site_callback', [
             'id'            => Schema::TYPE_PK,
@@ -33,7 +35,6 @@ class m150428_083252_first extends Migration
             'type'          => Schema::TYPE_INTEGER  . ' NOT NULL',
             'value'         => Schema::TYPE_TEXT
         ]);
-
         $this->addForeignKey('fk_site_callback_site_id', 'site_callback', 'site_id', 'sites', 'id', 'CASCADE', 'CASCADE');
     }
 
@@ -42,6 +43,7 @@ class m150428_083252_first extends Migration
         $this->dropColumn('{{%user}}', 'role');
         $this->delete('{{%user}}', ['username'=>'admin']);
 
+        $this->dropForeignKey('fk_sites_author_id', 'sites');
         $this->dropForeignKey('fk_site_callback_site_id', 'site_callback');
 
         $this->dropTable('sites');

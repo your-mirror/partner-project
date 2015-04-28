@@ -58,9 +58,7 @@ $config = [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
-                'POST <module:handler>/<id:\d+>/<code:\w+>' => 'handler/default/insert'
-
+                '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>'
             ),
         ],
         'db' => require(__DIR__ . '/db.php'),
@@ -74,6 +72,9 @@ $config = [
             'modelMap' => [
                 'User' => 'app\models\User',
             ],
+        ],
+        'site' => [
+            'class' => 'app\modules\site\Module',
         ],
     ],
     'params' => $params,
