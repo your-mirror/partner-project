@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Sites;
+use app\models\SiteCallback;
 use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
@@ -24,7 +25,11 @@ use yii\jui\DatePicker;
                 'attribute' => 'siteCallback',
                 'format' => 'html',
                 'value' => function ($model) {
-                    return '<p class="text-center"><span class="label label-success">'.$model->siteCallback->types[$model->siteCallback->type] .'</span> <br/>'. $model->siteCallback->value . '</p>';
+                    if(isset($model->siteCallback))
+                        return '<p class="text-center"><span class="label label-success">'.$model->siteCallback->types[$model->siteCallback->type] .'</span> <br/>'. $model->siteCallback->value . '</p>';
+
+                    $modelSiteCallback = new SiteCallback();
+                    return '<p class="text-center"><span class="label label-success">'.$modelSiteCallback->types[0].'</span>';
                 }
             ],
             [
