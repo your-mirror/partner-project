@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use yii\db\Expression;
+use yii\db\ActiveRecord;
 use app\models\User as User;
 
 /**
@@ -69,10 +69,11 @@ class Sites extends \yii\db\ActiveRecord
             ],
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
-                'value' => new Expression('NOW()'),
-            ],
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ]
+            ]
         ];
     }
 
@@ -92,6 +93,15 @@ class Sites extends \yii\db\ActiveRecord
             'author_id' => 'Автор',
             'siteCallback' => 'Обратная связь'
         ];
+    }
+
+    public function beforeValidate()
+    {
+        if (parent::beforeValidate()) {
+            $this->domain = str_ireplace('www.', '', parse_url($this->domain, PHP_URL_HOST));
+            return true;
+        }
+        return false;
     }
 
     public function getStatuses()

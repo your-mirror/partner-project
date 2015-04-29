@@ -47,7 +47,7 @@ use yii\jui\DatePicker;
                 'filter' => DatePicker::widget([
                     'model'      => $searchModel,
                     'attribute'  => 'created_at',
-                    'dateFormat' => 'php:Y-m-d',
+                    'dateFormat' => 'php:d-m-Y',
                     'options' => [
                         'class' => 'form-control'
                     ]
