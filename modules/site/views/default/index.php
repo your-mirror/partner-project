@@ -24,7 +24,6 @@ use yii\jui\DatePicker;
             [
                 'attribute' => 'siteCallback',
                 'format' => 'html',
-                'contentOptions'=>['style'=>'max-width: 200px;'],
                 'value' => function ($model) {
                     if(isset($model->siteCallback))
                         return '<p class="text-center"><span class="label label-success">'.$model->siteCallback->types[$model->siteCallback->type] .'</span> <br/>'. $model->siteCallback->value . '</p>';
