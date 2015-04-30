@@ -1,6 +1,7 @@
 <?php
 namespace app\models;
 
+use app\modules\site\controllers\StatisticController;
 use Yii;
 
 use dektrium\user\models\User as BaseUser;
@@ -58,5 +59,23 @@ class User extends BaseUser
         \Yii::getLogger()->log('An error occurred while registering user account', Logger::LEVEL_ERROR);
 
         return false;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username'          => \Yii::t('user', 'Username'),
+            'email'             => \Yii::t('user', 'Email'),
+            'registration_ip'   => \Yii::t('user', 'Registration ip'),
+            'unconfirmed_email' => \Yii::t('user', 'New email'),
+            'password'          => \Yii::t('user', 'Password'),
+            'created_at'        => \Yii::t('user', 'Registration time'),
+            'confirmed_at'      => \Yii::t('user', 'Confirmation time')
+        ];
+    }
+
+    public function getSites()
+    {
+        return $this->hasMany(Sites::className(), ['author_id' => 'id']);
     }
 }

@@ -31,7 +31,7 @@ class Sites extends \yii\db\ActiveRecord
 
     private $_statuses = [
         self::STATUS_NEW            => 'Новый',
-        self::STATUS_WAIT_CONTACT  => 'В ожидании контактов',
+        self::STATUS_WAIT_CONTACT   => 'В ожидании контактов',
         self::STATUS_WAIT_ANSWER    => 'В ожидании ответа',
         self::STATUS_DENY           => 'Отказался',
         self::STATUS_AGREE          => 'Согласился',
@@ -98,7 +98,8 @@ class Sites extends \yii\db\ActiveRecord
     public function beforeValidate()
     {
         if (parent::beforeValidate()) {
-            $this->domain = str_ireplace('www.', '', parse_url($this->domain, PHP_URL_HOST));
+            if(str_ireplace('www.', '', parse_url($this->domain, PHP_URL_HOST)) != '')
+                $this->domain = str_ireplace('www.', '', parse_url($this->domain, PHP_URL_HOST));
             return true;
         }
         return false;

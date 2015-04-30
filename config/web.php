@@ -67,6 +67,7 @@ $config = [
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableUnconfirmedLogin' => true,
+            'enableRegistration' => false,
             'confirmWithin' => 21600,
             'cost' => 12,
             'modelMap' => [
@@ -76,6 +77,9 @@ $config = [
         'site' => [
             'class' => 'app\modules\site\Module',
         ],
+        'managers' => [
+            'class' => 'app\modules\managers\Module',
+        ]
     ],
     'params' => $params,
 ];

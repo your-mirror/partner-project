@@ -27,12 +27,12 @@ class SitesSearch extends Model
         if(Yii::$app->user->identity->role != 'admin')
             $query = $query->where(['author_id' => Yii::$app->user->identity->id]);
 
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
-
-        $dataProvider->setSort([
-            'attributes' => [
-                'domain',
-                'created_at'
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder'=>[
+                    'created_at'=>SORT_DESC
+                ]
             ]
         ]);
 

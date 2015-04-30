@@ -38,8 +38,8 @@ AppAsset::register($this);
 
     if (Yii::$app->user->isGuest) {
         array_push($navItems,
-            ['label' => 'Войти', 'url' => ['/user/security/login']],
-            ['label' => 'Зарегистрироваться', 'url' => ['/user/registration/register']]
+            ['label' => 'Войти', 'url' => ['/user/security/login']]
+            //['label' => 'Зарегистрироваться', 'url' => ['/user/registration/register']]
         );
     } else {
         array_push($navItems,
@@ -56,22 +56,7 @@ AppAsset::register($this);
     <hr>
     <div class="container">
         <div class="col-md-2">
-            <?php
-                if(!Yii::$app->user->isGuest) {
-                    $navItems = [
-                        ['label' => 'Добавить сайт', 'url' => ['/site/default/create']],
-                        ['label' => 'Список всех сайтов', 'url' => ['/site/default/index']],
-                        ['label' => 'В ожидании контактов', 'url' => ['/site/default/contact']],
-                        ['label' => 'В ожидании ответа', 'url' => ['/site/default/answer']],
-                        ['label' => 'Отказанные', 'url' => ['/site/default/deny']],
-                        ['label' => 'Согласные', 'url' => ['/site/default/agree']],
-                    ];
-                    echo Nav::widget([
-                        'items' => $navItems,
-                        'options' => ['class' =>'nav nav-pills'],
-                    ]);
-                }
-            ?>
+            <?= $this->render('_leftMenu'); ?>
         </div>
         <div class="col-md-10">
             <?= $content ?>
