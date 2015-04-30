@@ -42,7 +42,7 @@ use yii\jui\DatePicker;
             [
                 'attribute' => 'created_at',
                 'value' => function ($model) {
-                    return date('d.m.Y, H:m', $model->created_at);
+                    return date('d.m.Y, H:i', $model->created_at);
                 },
                 'filter' => DatePicker::widget([
                     'model'      => $searchModel,
