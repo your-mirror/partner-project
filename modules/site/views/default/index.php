@@ -85,44 +85,6 @@ use yii\jui\DatePicker;
                 'hAlign'=>'center',
                 'vAlign'=>'middle',
             ],
-            /*[
-                'header' => 'Обратная связь',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    $label = '';
-
-                    //define label
-                    switch ($model->siteCallback->type) {
-                        case SiteCallback::TYPE_FORM:
-                            $label = 'label-success';
-                            break;
-                        case SiteCallback::TYPE_SITE_CONTACT:
-                            $label = 'label-info';
-                            break;
-                        case SiteCallback::TYPE_OTHER_CONTACT:
-                            $label = 'label-danger';
-                            break;
-                    }
-
-                    $txt = Editable::widget([
-                        'model'=>$model->siteCallback,
-                        'name' => 'siteCallback',
-                        'displayValue' => '<p class="text-center"><span class="label '.$label.'">'.$model->siteCallback->types[$model->siteCallback->type] .'</span></p>',
-                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                        'data' => $model->siteCallback->types,
-                        'afterInput' => function ($form, $widget) use ($model) {
-                                return
-                                    $form->field($model->siteCallback, 'value')->textArea(['placeholder'=>'Пусто...']) .
-                                    "\n\r" .
-                                    $form->field($model->siteCallback, 'value')->textArea(['placeholder'=>'Пусто...']);
-                        }
-                    ]);
-
-                    return $txt;
-                },
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-            ],*/
             [
                 'attribute' => 'status',
                 'class' => 'kartik\grid\EditableColumn',
