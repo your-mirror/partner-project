@@ -22,7 +22,7 @@ class SitesSearch extends Model
 
     public function search($params)
     {
-        $query = Sites::find();
+        $query = Sites::find()->joinWith(['siteCallback']);
 
         if(Yii::$app->user->identity->role != 'admin')
             $query = $query->where(['author_id' => Yii::$app->user->identity->id]);

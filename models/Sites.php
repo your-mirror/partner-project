@@ -91,7 +91,7 @@ class Sites extends \yii\db\ActiveRecord
             'created_at' => 'Создан',
             'updated_at' => 'Обновлен',
             'author_id' => 'Автор',
-            'siteCallback' => 'Обратная связь'
+            'siteCallbackValue' => 'Обратная связь'
         ];
     }
 
@@ -123,5 +123,15 @@ class Sites extends \yii\db\ActiveRecord
     public function getSiteCallback()
     {
         return $this->hasOne(SiteCallback::className(), ['site_id' => 'id']);
+    }
+
+    public function getSiteCallbackType()
+    {
+        return $this->siteCallback ? $this->siteCallback->type : 0;
+    }
+
+    public function getSiteCallbackValue()
+    {
+        return $this->siteCallback ? $this->siteCallback->value : '';
     }
 }

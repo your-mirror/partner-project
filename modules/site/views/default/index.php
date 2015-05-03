@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
+use kartik\editable\Editable;
 use app\models\Sites;
 use app\models\SiteCallback;
 use yii\jui\DatePicker;
@@ -15,13 +17,36 @@ use yii\jui\DatePicker;
         'dataProvider' => $dataProvider,
         'filterModel'  => $searchModel,
         'layout'  => "{items}\n{pager}",
+        'export' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
-            'domain',
-            'contacts:ntext',
-            'comments:ntext',
             [
+                'attribute' => 'domain',
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
+            ],
+            [
+                'attribute' => 'contacts',
+                'class' => 'kartik\grid\EditableColumn',
+                'editableOptions'=> [
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'submitOnEnter' => false
+                ],
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
+            ],
+            [
+                'attribute' => 'comments',
+                'class' => 'kartik\grid\EditableColumn',
+                'editableOptions'=> [
+                    'inputType' => Editable::INPUT_TEXTAREA,
+                    'submitOnEnter' => false
+                ],
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
+            ],
+            /*[
                 'attribute' => 'siteCallback',
                 'format' => 'html',
                 'value' => function ($model) {
@@ -31,9 +56,82 @@ use yii\jui\DatePicker;
                     $modelSiteCallback = new SiteCallback();
                     return '<p class="text-center"><span class="label label-success">'.$modelSiteCallback->types[0].'</span>';
                 }
+            ],*/
+            [
+                'class' => 'kartik\grid\EditableColumn',
+                'attribute' => 'siteCallbackValue',
+                'editableOptions'=> function ($model, $key, $index) {
+                    $label = '';
+
+                    //define label
+                    switch ($model->siteCallback->type) {
+                        case SiteCallback::TYPE_FORM:
+                            $label = 'label-success';
+                            break;
+                        case SiteCallback::TYPE_SITE_CONTACT:
+                            $label = 'label-info';
+                            break;
+                        case SiteCallback::TYPE_OTHER_CONTACT:
+                            $label = 'label-danger';
+                            break;
+                    }
+
+                    return [
+                        'displayValue' => '<p class="text-center"><span class="label '.$label.'">'.$model->siteCallback->types[$model->siteCallback->type] .'</span></p>',
+                        'inputType' => Editable::INPUT_TEXTAREA,
+                        'submitOnEnter' => false
+                    ];
+                },
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
             ],
+            /*[
+                'header' => 'Обратная связь',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $label = '';
+
+                    //define label
+                    switch ($model->siteCallback->type) {
+                        case SiteCallback::TYPE_FORM:
+                            $label = 'label-success';
+                            break;
+                        case SiteCallback::TYPE_SITE_CONTACT:
+                            $label = 'label-info';
+                            break;
+                        case SiteCallback::TYPE_OTHER_CONTACT:
+                            $label = 'label-danger';
+                            break;
+                    }
+
+                    $txt = Editable::widget([
+                        'model'=>$model->siteCallback,
+                        'name' => 'siteCallback',
+                        'displayValue' => '<p class="text-center"><span class="label '.$label.'">'.$model->siteCallback->types[$model->siteCallback->type] .'</span></p>',
+                        'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                        'data' => $model->siteCallback->types,
+                        'afterInput' => function ($form, $widget) use ($model) {
+                                return
+                                    $form->field($model->siteCallback, 'value')->textArea(['placeholder'=>'Пусто...']) .
+                                    "\n\r" .
+                                    $form->field($model->siteCallback, 'value')->textArea(['placeholder'=>'Пусто...']);
+                        }
+                    ]);
+
+                    return $txt;
+                },
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
+            ],*/
             [
                 'attribute' => 'status',
+                'class' => 'kartik\grid\EditableColumn',
+                'editableOptions' => [
+                    'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                    'data' => $siteModel->statuses
+                ],
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
                 'value' => function ($model) {
                     return $model->statuses[$model->status];
                 },
@@ -44,6 +142,8 @@ use yii\jui\DatePicker;
                 'value' => function ($model) {
                     return date('d.m.Y, H:i', $model->created_at);
                 },
+                'hAlign'=>'center',
+                'vAlign'=>'middle',
                 'filter' => DatePicker::widget([
                     'model'      => $searchModel,
                     'attribute'  => 'created_at',

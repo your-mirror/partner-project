@@ -27,7 +27,9 @@
         "dektrium/yii2-user": "*",
         "2amigos/yii2-tinymce-widget" : "~1.1",
         "kartik-v/yii2-widget-sidenav": "*",
-        "2amigos/yii2-date-picker-widget" : "~1.0"
+        "2amigos/yii2-date-picker-widget" : "~1.0",
+        "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-editable": "*"
     },
     "config": {
         "process-timeout": 1800

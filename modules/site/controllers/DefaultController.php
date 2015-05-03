@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\Response;
 
 /**
  * DefaultController implements the CRUD actions for Sites model.
@@ -50,6 +51,72 @@ class DefaultController extends Controller
         $GET = \Yii::$app->request->get();
         $searchModel  = \Yii::createObject(SitesSearch::className());
         $dataProvider = $searchModel->search($GET);
+
+        if (Yii::$app->request->post('hasEditable')) {
+            $siteId = Yii::$app->request->post('editableKey');
+            $site = $this->findSite($siteId);
+
+            if (!\Yii::$app->user->can('crudOwnSite', ['author_id'=>$site->author_id]) && !\Yii::$app->user->can('admin')) {
+                throw new NotFoundHttpException('Access denied');
+            }
+
+            $out = ['output'=>'', 'message'=>''];
+
+            // fetch the first entry in posted data (there should
+            // only be one entry anyway in this array for an
+            // editable submission)
+            // - $posted is the posted data for Book without any indexes
+            // - $post is the converted array for single model validation
+            $post = [];
+            $posted = current($_POST['Sites']);
+            $post['Sites'] = $posted;
+
+            if ($site->load($post)) {
+                $site->save();
+
+                // custom output to return to be displayed as the editable grid cell
+                // data. Normally this is empty - whereby whatever value is edited by
+                // in the input by user is updated automatically.
+                $output = '';
+
+                // specific use case where you need to validate a specific
+                // editable column posted when you have more than one
+                // EditableColumn in the grid view. We evaluate here a
+                // check to see if buy_amount was posted for the Book model
+                if (isset($posted['status'])) {
+                    $output =  $site->statuses[$posted['status']];
+                }
+
+                if (isset($posted['siteCallbackValue'])) {
+                    $site->siteCallback->value = $posted['siteCallbackValue'];
+                    $site->siteCallback->save();
+
+                    $label = '';
+                    switch ($site->siteCallback->type) {
+                        case SiteCallback::TYPE_FORM:
+                            $label = 'label-success';
+                            break;
+                        case SiteCallback::TYPE_SITE_CONTACT:
+                            $label = 'label-info';
+                            break;
+                        case SiteCallback::TYPE_OTHER_CONTACT:
+                            $label = 'label-danger';
+                            break;
+                    }
+
+                    $output = '<p class="text-center"><span class="label '.$label.'">'.$site->siteCallback->types[$site->siteCallback->type] .'</span></p>';
+                }
+
+                // similarly you can check if the name attribute was posted as well
+                // if (isset($posted['name'])) {
+                //   $output =  ''; // process as you need
+                // }
+                $out = ['output'=>$output, 'message'=>''];
+            }
+
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            return $out;
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

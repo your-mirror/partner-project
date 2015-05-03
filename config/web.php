@@ -79,6 +79,9 @@ $config = [
         ],
         'managers' => [
             'class' => 'app\modules\managers\Module',
+        ],
+        'gridview' => [
+            'class' => '\kartik\grid\Module'
         ]
     ],
     'params' => $params,
